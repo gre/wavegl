@@ -22,7 +22,7 @@ function validate (source) {
   try {
     var context = webglCanvas.gl;
     var shader = context.createShader(context.FRAGMENT_SHADER);
-    context.shaderSource(shader, HEADER+source);
+    context.shaderSource(shader, HEADER+source+"void main(void){}");
     context.compileShader(shader);
     status = context.getShaderParameter(shader, context.COMPILE_STATUS);
     if (!status) {
