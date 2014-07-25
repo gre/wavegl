@@ -30,6 +30,9 @@ float adsr(float tabs, vec4 env, float start, float duration) {
   }
 }
 
+float rand(float co){
+  return fract(sin(dot(vec2(co),vec2(12.9898,78.233))) * 43758.5453);
+}
 
 float sine(float t, float x){
   return sin(2.0 * PI * t * x);
@@ -49,20 +52,17 @@ float saw(float t, float x) {
   return fract(2.0 * t * x) * 2.0 - 1.0;
 }
 
-float beat (float t, float start) {
-  return sin(2.0 * PI * t * pow(mod(1.0-t, 1.0), 7.0));
+float beat (float t, float s, float f) {
+  t = min(t, s);
+  float r = tri(t, f * smoothstep(2.0*s, 0.0, t));
+  return r;
 }
 
 float synth (float t, float f) {
   return 0.6 * tri(t, f / 2.0) +
-         0.1 * saw(t, f / 4.0 + 0.1*sine(t, 0.2));
-/*
-  return 0.9 * sine(t, 2.0) + 
-    sat(0.4 * sine(t, f + 0.1), 0.5) + 
-    sat(0.6 * sine(t, f / 2.0 + 0.1), 0.5) + 
-    sat(1.0 * sine(t, f / 2.0), 0.8) +
-    0.0;
-    */
+         sat(0.8 * sine(t, f / 4.0 + 0.1), 0.2) +
+         0.1 * saw(t, f / 4.0 + 0.3) +
+         0.1 * saw(t, f / 4.0);
 }
 
 float sweetDreamSynth (float t) {
@@ -90,11 +90,16 @@ float sweetDreamSynth (float t) {
   int section = int(floor(m));
   float sound = 0.0;
   for (int i=0; i<16; ++i) {
-    sound += synth(t, noteToFreq(float(notes[i]))) * adsr(m, vec4(0.05, 0.1, 0.7, 0.2), float(i), 0.8);
+    sound += synth(t, (mod(t * bps * 2.0, 32.0) > 16.0 ? 1.0 : 2.0) * noteToFreq(float(notes[i]))) * adsr(m, vec4(0.05, 0.1, 0.7, 0.2), float(i), 0.5);
   }
   return sound;
 }
 
 float dsp(float t) {
-  return 0.4 * beat(t, mod(t*bps, 1.0)) + 0.8 * sweetDreamSynth(t);
+  float nobeatsfreq = 6.0;
+  return ( mod(t * bps * 2.0, nobeatsfreq * 16.0)/16.0 < nobeatsfreq-2.0 ?
+          0.5 * beat(mod(t * bps, 1.0), 0.2, 60.0) +
+          0.1 * adsr(mod(t * bps, 1.0), vec4(0.02, 0.05, 0.7, 0.2), 0.5, 0.1) * rand(t) : 0.0
+         ) +
+         0.5 * sweetDreamSynth(t);
 }
