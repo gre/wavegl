@@ -33,7 +33,7 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
   filter.Q.value = 1.0;
   var compressor = audioContext.createDynamicsCompressor(); // Protect the output sound card with a compressor
   var finalGain = audioContext.createGain(); // Reduce the final destination gain
-  finalGain.gain.value = 0.1;
+  finalGain.gain.value = 0.8;
   destination.connect(filter);
   filter.connect(compressor);
   compressor.connect(finalGain);
