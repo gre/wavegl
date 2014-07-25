@@ -1,6 +1,10 @@
 
 float PI = acos(-1.0);
 
+float noteToFreq (float n) {
+  return pow(2.0, (n-49.0)/12.0) * 440.0;
+}
+
 float adsr(float tabs, vec4 env, float start, float duration) {
   float t = tabs - start;
   float sustain = env[2];
@@ -21,14 +25,17 @@ float adsr(float tabs, vec4 env, float start, float duration) {
   } else {
     return sustain * smoothstep(t4, t3, t);
   }
-  
-  
 }
+
+float sat (float t, float amp) {
+  return max(-amp, min(t, amp));
+}
+
 float sine(float t, float freq) {
   return sin(2.0 * PI * t * freq);
 }
 float dsp(float t) {
-  return adsr(t, 0, vec4(1., 0., 0., 0.), 4.0, 0.) * sine(t, 440.);
+  return adsr(t, vec4(0.1, 0.2, 0.7, 0.9), 0.1, 0.4) * sine(t, 440.);
 }
 
 /*
