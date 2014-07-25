@@ -61,7 +61,7 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 
   var absoluteBufferTime = 0;
   var nextBufferTime = 0;
-  var refreshRate = 0.1;
+  var refreshRate = 0.05;
   var scheduleAdvance = 0.2;
   function schedulingLoop () {
     while (audioContext.currentTime + scheduleAdvance > nextBufferTime) {
