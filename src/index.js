@@ -27,15 +27,10 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 (function basicPoC (){
   var audioContext = new AudioContext();
   var destination = audioContext.createGain(); // The entry node of the GLSL output.
-  var filter = audioContext.createBiquadFilter(); // a filter to remove out that noise due to imprecision in GLSL
-  filter.type = "notch";
-  filter.frequency.value = 11050;
-  filter.Q.value = 0.8;
   var compressor = audioContext.createDynamicsCompressor(); // Protect the output sound card with a compressor
   var finalGain = audioContext.createGain(); // Reduce the final destination gain
   finalGain.gain.value = 0.8;
-  destination.connect(filter);
-  filter.connect(compressor);
+  destination.connect(compressor);
   compressor.connect(finalGain);
   finalGain.connect(audioContext.destination);
 
