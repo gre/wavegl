@@ -30,7 +30,7 @@ var UI = React.createClass({
     }, this);
     return <div>
       <SoundViz buffer={this.props.buffer} width={this.props.bufferWidth} height={this.props.bufferHeight} />
-      <SoundEditor onChangeSuccess={this.props.onGlslChange} onChangeFailure={this.props.onGlslFailed} initialGlsl={this.props.initialGlsl} width={600} height={400} />
+      <SoundEditor onChangeSuccess={this.props.onGlslChange} onChangeFailure={this.props.onGlslFailed} initialGlsl={this.props.initialGlsl} width={600} height={800} />
       <nav>
         {sounds}
       </nav>
