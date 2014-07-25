@@ -1,0 +1,70 @@
+/*
+ * This file is part of wavegl: https://github.com/gre/wavegl
+ *
+ * Copyright 2014 Zengularity
+ *
+ * wavegl is free software: you can redistribute it and/or modify
+ * it under the terms of the AFFERO GNU General Public License as published by
+ * the Free Software Foundation.
+ *
+ * wavegl is distributed "AS-IS" AND WITHOUT ANY WARRANTY OF ANY KIND,
+ * INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ * NON-INFRINGEMENT, OR FITNESS FOR A PARTICULAR PURPOSE. See
+ * the AFFERO GNU General Public License for the complete license terms.
+ *
+ * You should have received a copy of the AFFERO GNU General Public License
+ * along with wavegl.  If not, see <http://www.gnu.org/licenses/agpl-3.0.html>
+ */
+.status-message.error {
+  background-color: #c63;
+  color: #fff;
+}
+.status-message.warn {
+  background-color: #a63;
+  color: #fff;
+}
+.status-message.success {
+  background-color: #3c6;
+  color: #fff;
+}
+.status-message.info {
+  background-color: #666;
+  color: #fff;
+}
+.status-message.success,
+.status-message.info,
+.status-message.error,
+.status-message.warn {
+  transition: none;
+}
+.status-message {
+  background-color: #666;
+  color: #999;
+  transition: 0.5s;
+}
+.sound-editor .status-message {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+  overflow: auto;
+  white-space: nowrap;
+}
+body,
+html {
+  background: #eee;
+}
+canvas {
+  background: #000;
+}
+.sound-viz {
+  float: left;
+}
+.sound-editor {
+  float: left;
+}
+nav a {
+  display: block;
+}
