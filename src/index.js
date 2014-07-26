@@ -47,7 +47,7 @@ var BUFFER_HEIGHT = 64;
     generator = createGenerator(webGLCanvas, audioContext.sampleRate, initialGlsl);
   }
   catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   ////// STATES
