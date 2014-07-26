@@ -50,6 +50,7 @@ function createGenerator (webGLCanvas, sampleRate, glslCodeWithDspFunction) {
 
   // Returns a generate function which returns the pixel buffer of the canvas from a given bufferTime
   function generate (bufferTime, channel, optionalBuffer) {
+    shader.bind();
     var buffer = optionalBuffer || new Uint8Array(w * h * 4);
     shader.uniforms.bufferTime = bufferTime / sampleRate;
     shader.uniforms.channel = channel;

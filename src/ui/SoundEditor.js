@@ -1,8 +1,9 @@
+/** @jsx React.DOM */
+
 /**
  * Heavy inspired from GLSL.io code
  */
 
-/** @jsx React.DOM */
 var React = require("react");
 var GlslEditor = require("./GlslEditor");
 var StatusMessage = require("./StatusMessage");
@@ -35,7 +36,6 @@ function validate (source) {
   if (status === true) {
     try {
       var generate = createGenerator(webglCanvas, 44100, source);
-      generate(0);
       generate.destroy();
     }
     catch (e) {
@@ -136,8 +136,8 @@ var SoundEditor = React.createClass({
     }
   },
   render: function () {
-    return <div className="sound-editor">
-      {this.transferPropsTo(<GlslEditor ref="editor" onChange={this.onChange} />)}
+    return <div className="sound-editor" style={{ width: this.props.width+"px", height: this.props.height+"px" }}>
+      {this.transferPropsTo(<GlslEditor height={this.props.height-30} ref="editor" onChange={this.onChange} />)}
       <StatusMessage type={this.state.compilationStatus}>{this.state.compilationMessage}</StatusMessage>
     </div>;
   }

@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 /*
  * This file is part of wavegl: https://github.com/gre/wavegl
  *
@@ -16,7 +18,6 @@
  * along with wavegl.  If not, see <http://www.gnu.org/licenses/agpl-3.0.html>
  */
 
-/** @jsx React.DOM */
 var React = require("react");
 var _ = require("lodash");
 var SoundEditor = require("./SoundEditor");
@@ -25,12 +26,14 @@ var examples = require("../examples");
 
 var UI = React.createClass({
   render: function () {
+    var width = this.props.width;
+    var height = this.props.height;
     var sounds = _.map(examples, function (glsl, name) {
-      return <a key={name} href={"?example="+name}>{name}</a>;
+      return <a key={name} className={"sound"+(name===this.props.currentSound ? " current" : "")} href={"?example="+name}>{name}</a>;
     }, this);
     return <div>
-      <SoundViz buffer={this.props.buffer} width={this.props.bufferWidth} height={this.props.bufferHeight} />
-      <SoundEditor onChangeSuccess={this.props.onGlslChange} onChangeFailure={this.props.onGlslFailed} initialGlsl={this.props.initialGlsl} width={600} height={800} />
+      <SoundViz buffers={this.props.buffers} bufferWidth={this.props.bufferWidth} width={200} height={height} currentTime={this.props.currentTime} />
+      <SoundEditor onChangeSuccess={this.props.onGlslChange} onChangeFailure={this.props.onGlslFailed} initialGlsl={this.props.initialGlsl} width={width} height={height} />
       <nav>
         {sounds}
       </nav>

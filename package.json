@@ -5,8 +5,8 @@
   "scripts": {
     "build": "mkdir -p build; npm run build-js && npm run build-css",
     "watch": "mkdir -p build; npm run watch-js & npm run watch-css",
-    "build-js": "browserify -t glslifyify -t [ reactify --extension js ] src/index.js | uglifyjs -mc > build/index.js",
-    "watch-js": "watchify -t glslifyify -t [ reactify --extension js ] src/index.js -o build/index.js -dv",
+    "build-js": "export NODE_ENV=production; browserify -t reactify -t brfs src/index.js | uglifyjs -mc > build/index.js",
+    "watch-js": "watchify -t reactify -t brfs src/index.js -o build/index.js -dv",
     "build-css": "stylus src/index.styl -o build/",
     "watch-css": "stylus -w src/index.styl -o build/"
   },
@@ -28,7 +28,7 @@
   "devDependencies": {
     "browserify": "5.0.7",
     "watchify": "0.10.2",
-    "glslifyify": "0.1.1",
+    "brfs": "1.2.0",
     "reactify": "0.14.0",
     "uglify-js": "2.4.15",
     "stylus": "0.47.3"
