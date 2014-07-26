@@ -17,20 +17,7 @@
  */
 
 var createShader = require("gl-shader")
-
-// Wrap the dsp function glsl code with wrapper to properly encode the audio samples buffer
-function glslAudioWrapper (glslCodeWithDspFunction) {
-  return '#ifdef GL_ES\nprecision highp int;precision highp float;\n#endif\n'+
-    'uniform vec2 resolution;'+
-    'uniform float bufferTime;'+
-    'uniform float sampleRate;'+
-    glslCodeWithDspFunction+
-    'void main () {'+
-      'float t = bufferTime + 4.*(gl_FragCoord.y * resolution.x + gl_FragCoord.x) / sampleRate;'+
-      'vec4 r = vec4(dsp(t),dsp(t+1.0/sampleRate), dsp(t+2.0/sampleRate), dsp(t+3.0/sampleRate));'+ // rgba vector contains 4 samples
-      'gl_FragColor = (r+1.0)/2.0;'+ // normalize to [ 0, 1 ] to get a color representation
-    '}';
-}
+var glslAudioWrapper = require("./glslAudioWrapper");
 
 // Basic square vertex (2 triangles)
 var VERT_SHADER = 'precision highp int;precision highp float;attribute vec2 position; void main() { gl_Position = vec4(2.0*position-1.0, 0.0, 1.0);}';
@@ -62,9 +49,10 @@ function createGenerator (webGLCanvas, sampleRate, glslCodeWithDspFunction) {
   ]), gl.STATIC_DRAW);
 
   // Returns a generate function which returns the pixel buffer of the canvas from a given bufferTime
-  function generate (bufferTime, optionalBuffer) {
+  function generate (bufferTime, channel, optionalBuffer) {
     var buffer = optionalBuffer || new Uint8Array(w * h * 4);
     shader.uniforms.bufferTime = bufferTime / sampleRate;
+    shader.uniforms.channel = channel;
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buffer);
     return buffer;

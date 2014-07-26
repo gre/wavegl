@@ -48,6 +48,7 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 
   }
 
+  var appNode = document.getElementById("app");
   function render (currentBuffer) {
     React.renderComponent(UI({
       buffer: currentBuffer,
@@ -56,7 +57,7 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
       onGlslChange: onGlslChange,
       onGlslFailed: onGlslFailed,
       initialGlsl: initialGlsl
-    }), document.body);
+    }), appNode);
   }
 
   var absoluteBufferTime = 0;
@@ -68,9 +69,11 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
       // Render + schedule next chunk
       var bufferSource = audioContext.createBufferSource();
       bufferSource.connect(destination); // FIXME: .disconnect() should be called when audio chunk is finished
-      var pixelBuffer = generator(absoluteBufferTime);
-      var audioBuffer = audioContext.createBuffer(1, pixelBuffer.length, audioContext.sampleRate);
+      var pixelBuffer = generator(absoluteBufferTime, 0);
+      var audioBuffer = audioContext.createBuffer(2, pixelBuffer.length, audioContext.sampleRate);
       audioBuffer.getChannelData(0).set(pixelBuffer);
+      pixelBuffer = generator(absoluteBufferTime, 1);
+      audioBuffer.getChannelData(1).set(pixelBuffer);
       bufferSource.buffer = audioBuffer;
       bufferSource.start(nextBufferTime);
       nextBufferTime += audioBuffer.duration;
