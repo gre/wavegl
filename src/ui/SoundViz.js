@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 /*
  * This file is part of wavegl: https://github.com/gre/wavegl
  *
@@ -17,84 +19,35 @@
  */
 
 
-/** @jsx React.DOM */
 var React = require("react");
+var BufferViz = require("./BufferViz");
+var _ = require("lodash");
 
 var SoundViz = React.createClass({
   propTypes: {
-    buffer: React.PropTypes.instanceOf(Uint8Array),
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    buffers: React.PropTypes.array,
+    bufferWidth: React.PropTypes.number,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+    currentTime: React.PropTypes.number
   },
   render: function () {
-    var width = this.props.width * 7;
-    var height = this.props.height * 7;
-    return <div className="sound-viz">
-      <canvas ref="canvas" width={width} height={height}></canvas>
-    </div>;
-  },
-  componentDidMount: function () {
-    this.drawCanvas();
-  },
-  componentDidUpdate: function () {
-    this.drawCanvas();
-  },
-  drawCanvas: function () {
-    var buffer = this.props.buffer;
+    var bufferWidth = this.props.bufferWidth;
     var width = this.props.width;
+    var scale = width / bufferWidth;
     var height = this.props.height;
-    if (buffer) {
-      var canvas = this.refs.canvas.getDOMNode();
-      var ctx = canvas.getContext("2d");
-      var border = 0;
-      var fill = 7;
-      var pH = border + fill;
-      var pW = border + fill;
-      var fH = canvas.height;
-      var fW = canvas.width;
-      var data = ctx.createImageData(fW, fH);
-      var outBuffer = data.data;
-
-      function mult(e, n) {
-        var buffer = new Uint8Array(n);
-        for (var i = 0; i < n; i ++) {
-          buffer[i] = e;
-        }
-        return buffer;
-      }
-
-      function multb(b, n) {
-        var buffer = new Uint8Array(b.length * n);
-        for (var i = 0; i < n; i++) {
-          buffer.set(b, i * b.length);
-        }
-        return buffer;
-      }
-
-      function drawX(pixel) {
-        var buffer = new Uint8Array(pW * 4);
-
-        buffer.set(multb(mult(255, 4), border), 0);
-        buffer.set(multb(pixel, fill), border * 4);
-
-        return buffer;
-      }
-
-      for (var y = 0; y < height; y++) {
-        var line = new Uint8Array(pW * 4 * width);
-        var startY = ( 4 * y * width )
-        for (var x = 0; x < width; x++) {
-          var startX = startY + ( 4 * x ),
-              pixel = buffer.subarray(startX, startX + 4);
-          line.set(drawX(pixel), x * pW * 4);
-        }
-        outBuffer.set(multb(mult(255, 4), fW * border), 4 * y * pH * fW);
-        outBuffer.set(multb(line, fill), 4 * (y * pH + border) * fW);
-
-        ctx.putImageData(data, 0, 0);
-      }
-    }
+    var currentTime = this.props.currentTime;
+    var timeWindow = width * height;
+    var all = this.props.buffers.map(function (buffer) {
+      return <div className="sound-viz-buffer" key={buffer.bufferTime} style={{ top: Math.floor(scale * (buffer.bufferTime-currentTime)/(bufferWidth*4))+"px" }}>
+        {BufferViz(_.extend({ scale: scale }, buffer))}
+      </div>;
+    }, this);
+    return <div className="sound-viz" style={{ width: Math.floor(width)+"px", height: Math.floor(height)+"px" }}>
+      {all}
+    </div>;
   }
 });
 
 module.exports = SoundViz;
+

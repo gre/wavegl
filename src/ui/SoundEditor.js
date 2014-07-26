@@ -1,18 +1,19 @@
+/** @jsx React.DOM */
+
 /**
  * Heavy inspired from GLSL.io code
  */
 
-/** @jsx React.DOM */
 var React = require("react");
 var GlslEditor = require("./GlslEditor");
 var StatusMessage = require("./StatusMessage");
 var createWebGLCanvas = require("../createWebGLCanvas");
 var createGenerator = require("../createGenerator");
-
-var HEADER = '#ifdef GL_ES\nprecision highp int;precision highp float;\n#endif\n';
-var HEADER_LINES = 3;
+var glslAudioWrapper = require("../glslAudioWrapper");
 
 var webglCanvas = createWebGLCanvas(100, 100);
+
+var HEADER_LINES = 5;
 
 function validate (source) {
   var details, error, i, lineStr, line, lines, log, message, status, _i, _len;
@@ -22,7 +23,7 @@ function validate (source) {
   try {
     var context = webglCanvas.gl;
     var shader = context.createShader(context.FRAGMENT_SHADER);
-    context.shaderSource(shader, HEADER+source+"void main(void){}");
+    context.shaderSource(shader, glslAudioWrapper(source));
     context.compileShader(shader);
     status = context.getShaderParameter(shader, context.COMPILE_STATUS);
     if (!status) {
@@ -35,7 +36,6 @@ function validate (source) {
   if (status === true) {
     try {
       var generate = createGenerator(webglCanvas, 44100, source);
-      generate(0);
       generate.destroy();
     }
     catch (e) {
@@ -136,8 +136,8 @@ var SoundEditor = React.createClass({
     }
   },
   render: function () {
-    return <div className="sound-editor">
-      {this.transferPropsTo(<GlslEditor ref="editor" onChange={this.onChange} />)}
+    return <div className="sound-editor" style={{ width: this.props.width+"px", height: this.props.height+"px" }}>
+      {this.transferPropsTo(<GlslEditor height={this.props.height-30} ref="editor" onChange={this.onChange} />)}
       <StatusMessage type={this.state.compilationStatus}>{this.state.compilationMessage}</StatusMessage>
     </div>;
   }

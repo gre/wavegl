@@ -1,6 +1,7 @@
+// Code ported from wavepot.com as a proof of concept that code is compatible :-)
+
 float PI = acos(-1.0);
 float tau = 2.0 * PI;
-
 
 float sub(float wave, float mul, float t){
   return sin(wave * mul + tau * t);

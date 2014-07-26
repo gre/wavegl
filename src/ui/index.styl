@@ -1,21 +1,29 @@
 @import StatusMessage
 @import SoundEditor
+@import SoundViz
+@import BufferViz
 
-body, html {
-  background: #eee;
-}
-canvas {
-  background: #000;
-}
 .sound-viz {
+  display: inline-block;
   float: left;
+  vertical-align: top;
 }
 .sound-editor {
+  display: inline-block;
   float: left;
+  vertical-align: top;
 }
 
 nav {
+  display: inline-block;
+  padding-top: 150px;
+  margin-left: 5px;
   a {
+    text-decoration: none;
     display: block;
+    color: #aaa;
+    &.current {
+      color: #000;
+    }
   }
 }

@@ -1,9 +1,10 @@
+/** @jsx React.DOM */
+
 /**
  * This file is taken from https://GLSL.io/
  * https://github.com/glslio/glsl.io/blob/master/client/src/screens/editor/GlslEditor/index.js
  */
 
-/** @jsx React.DOM */
 var React = require("react");
 var _ = require("lodash");
 var ace = window.ace;
@@ -54,6 +55,7 @@ var GlslEditor = React.createClass({
     });
     editor.setFontSize("14px");
     editor.setShowPrintMargin(false);
+    editor.setTheme("ace/theme/tomorrow_night");
     var session = editor.getSession();
     session.setTabSize(2);
     session.setMode("ace/mode/glsl");
