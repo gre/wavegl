@@ -80,10 +80,10 @@ float beat (float t, float s, float f) {
 // The general synth of used for the melody
 float synth (float t, float f) {
   t += mix(0.2, 0.6, channel) * sin(t * 2.0) / f;
-  return 0.6 * tri(t, f / 2.0) +
-         sat(0.8 * sine(t, f / 4.0 + 0.1), 0.2) +
-         0.1 * saw(t, f / 4.0 + 0.3) +
-         0.1 * saw(t, f / 4.0);
+  return 0.3 * tri(t, f / 2.0) +
+         sat(0.8 * sine(t, f / 4.0 + 0.2), 0.2) +
+         0.2 * saw(t, f / 4.0) +
+         0.2 * saw(t, f / 4.0 + mix(0.3, 0.2, channel));
 }
 
 // the SweetDream melody
@@ -114,7 +114,7 @@ float sweetDreamSynth (float t) {
   // Adds up all notes together to avoid ticks and allows overlaps
   for (int i=0; i<16; ++i) {
     // Multiply a synth with an envelope and you have one note :-)
-    sound += synth(t, (mod(t * bps * 2.0, 32.0) > 16.0 ? 1.0 : 2.0) * noteToFreq(float(notes[i]))) * adsr(m, vec4(0.05, 0.1, 0.7, 0.5), float(i), 0.6);
+    sound += synth(t, (mod(t * bps * 2.0, 32.0) > 16.0 ? 1.0 : 2.0) * noteToFreq(float(notes[i]))) * adsr(m, vec4(0.1, 0.2, 0.7, 0.8), float(i), 0.6);
   }
   // Additive audio <3
   return sound;
@@ -126,10 +126,11 @@ float dsp(float t) {
     // Sometimes in the song, we stop the beat for a better ambiant
     mod(t * bps * 2.0, nobeatsfreq * 16.0)/16.0 < nobeatsfreq-2.0 ?
     // beat:
-    0.5 * beat(mod(t * bps, 1.0), 0.2, 60.0) * mix(0.6, 1.0, channel) +
+    0.6 * beat(mod(t * bps, 2.0), 0.2, 60.0) * mix(0.6, 1.0, channel) +
     // hit hat:
-    0.1 * adsr(mod(t * bps, 1.0), vec4(0.02, 0.05, 0.7, 0.2), 0.5, 0.1) * rand(t) * mix(0.4, 1.0, channel) : 0.0
+    0.3 * adsr(mod(t * bps, 2.0), vec4(0.02, 0.05, 0.7, 1.0), 1.0, 0.1) * rand(t) * mix(0.8, 1.0, channel) : 0.0
   ) +
     // melody
-    0.5 * sweetDreamSynth(t) * mix(1.0, 0.8, channel);
+    0.4 * sweetDreamSynth(t) * mix(1.0, 0.8, channel);
 }
+

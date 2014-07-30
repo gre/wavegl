@@ -125,3 +125,12 @@ Watch loop for development:
 ```
 npm run watch
 ```
+
+Known limitations
+---
+
+the main idea is to have this pipeline: `GLSL (GPU) -> readPixels -> WebAudioAPI (Audio Card)`. No overhead of JS, pipe an Uint8Array from the GPU to the Audio Card !
+
+The idea is a hack at the start but they could be some real potential :-)
+
+The GLSL have limitation for such hack usage though :-D After like 2 minutes you will start notice some noise in the sound, well that is due to float imprecision (I also had to use a float in second instead of an int sample number) + there is no support for binary logic operator so we can't make ByteBeat + Latency is an issue if you want to have user interaction.
