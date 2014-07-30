@@ -104,7 +104,7 @@ float sweetDreamSynth (float t) {
   notes[11]=48;
   notes[12]=31;
   notes[13]=31;
-  notes[14]=43;
+  notes[14]=46;
   notes[15]=48;
 
   float m = mod(t * bps * 2.0, 16.0);
